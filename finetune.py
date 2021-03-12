@@ -161,10 +161,8 @@ class PrunningFineTuner_VGG16:
         self.model.train()
 
     def eval_test_results(self):
-        # class_names = ['impressionism','miniature']
-        class_names = ['امپرسیونیسم','مینیاتور']
+        class_names = ['COVID','NonCOVID']
         plt.figure(figsize=(25,10))
-        plt.rcParams["font.family"] = "B Nazanin"
         count = np.zeros(2)
 
         self.model.eval()
@@ -194,8 +192,7 @@ class PrunningFineTuner_VGG16:
                 color = 'red'
             # prob = yHat[0][0] if predicted_label==1 else (1-yHat[0][0])
             # plt.xlabel("({:.2f}){}".format(prob,make_farsi_text(class_names[predicted_label])),color=color, fontsize=35)
-            # plt.xlabel("{}".format(class_names[pred]),color=color, fontsize=25)
-            plt.xlabel("{}".format(make_farsi_text(class_names[pred])),color=color, fontsize=30)
+            plt.xlabel("{}".format(class_names[pred]),color=color, fontsize=25)
         plt.show()        
         print("Accuracy :", float(correct) / total)
         
@@ -293,9 +290,9 @@ class PrunningFineTuner_VGG16:
 
         # print("Finished. Going to fine tune the model a bit more")
         # self.train(optimizer, epoches=5) # M.Amintoosi 15->3
-        models_dir = '/content/drive/My Drive/onlyOnWeb/sparse/pytorch-pruning/models/'
+        models_dir = 'models/'
         # torch.save(model.state_dict(), models_dir+"painting_model_prunned.pt")
-        torch.save(model, models_dir+"painting_model_prunned.pt")
+        torch.save(model, models_dir+"VGG_model_COVID19_prunned.pt")
 
 def get_args():
     parser = argparse.ArgumentParser()
@@ -318,12 +315,11 @@ if __name__ == '__main__':
     if args.train:
         model = ModifiedVGG16Model()
     elif args.prune:
-        models_dir = '/content/drive/My Drive/onlyOnWeb/sparse/pytorch-pruning/models/'
-        model = torch.load(models_dir+"painting_model.pt", map_location=lambda storage, loc: storage)
+        models_dir = 'models/'
+        model = torch.load(models_dir+"VGG_model_COVID19.pt", map_location=lambda storage, loc: storage)
     elif args.test:
-        # models_dir = '/content/drive/My Drive/onlyOnWeb/sparse/pytorch-pruning/models/'
-        models_dir = 'C:/Archive/data/models/'
-        model = torch.load(models_dir+"painting_model_prunned.pt", map_location=lambda storage, loc: storage)
+        models_dir = 'models/'
+        model = torch.load(models_dir+"VGG_model_COVID19_prunned.pt", map_location=lambda storage, loc: storage)
     
     if args.use_cuda:
         model = model.cuda()
@@ -333,8 +329,8 @@ if __name__ == '__main__':
 
     if args.train:
         fine_tuner.train(epoches=15)
-        models_dir = '/content/drive/My Drive/onlyOnWeb/sparse/pytorch-pruning/models/'
-        torch.save(model, models_dir+"painting_model.pt")
+        models_dir = 'models/'
+        torch.save(model, models_dir+"VGG_model_COVID19.pt")
     elif args.prune:
         fine_tuner.prune()
     elif args.test:
