@@ -15,13 +15,6 @@ from operator import itemgetter
 from heapq import nsmallest
 import time
 import matplotlib.pyplot as plt
-from bidi.algorithm import get_display
-import arabic_reshaper
-
-def make_farsi_text(x):
-    reshaped_text = arabic_reshaper.reshape(x)
-    farsi_text = get_display(reshaped_text)
-    return farsi_text
 
 class ModifiedVGG16Model(torch.nn.Module):
     def __init__(self):
