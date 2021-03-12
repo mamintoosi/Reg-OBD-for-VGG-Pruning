@@ -321,7 +321,7 @@ if __name__ == '__main__':
     fine_tuner = PrunningFineTuner_VGG16(args.train_path, args.test_path, model)
 
     if args.train:
-        fine_tuner.train(epoches=15)
+        fine_tuner.train(epoches=40)
         models_dir = 'models/'
         torch.save(model, models_dir+"VGG_model_COVID19.pt")
     elif args.prune:
