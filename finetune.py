@@ -1,6 +1,8 @@
 import torch
 from torch.autograd import Variable
 from torchvision import models
+from torchsummary import summary
+
 import cv2
 import sys
 import numpy as np
@@ -248,9 +250,9 @@ class PrunningFineTuner_VGG16:
         num_filters_to_prune_per_iteration = 512
         iterations = int(float(number_of_filters) / num_filters_to_prune_per_iteration)
 
-        iterations = int(iterations * 9.5 / 10) # M.Amintoosi
+        iterations = int(iterations * 9. / 10) # M.Amintoosi
 
-        print("Number of prunning iterations to reduce 95% filters", iterations)
+        print("Number of prunning iterations to reduce 90% filters", iterations)
 
         for i in range(iterations):
             print("Iter: ", i, '/', iterations)
