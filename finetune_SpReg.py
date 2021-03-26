@@ -373,7 +373,7 @@ if __name__ == '__main__':
     fine_tuner = PrunningFineTuner_VGG16(args.train_path, args.test_path, model)
 
     if args.train:
-        fine_tuner.train(epoches=15, regularization=regularizationFun, args=args)
+        fine_tuner.train(epoches=15, regularization=regularizationFun)
         model_file_name = '{}VGG_model_{}_reg-{}.pt'.format(args.models_dir, \
             args.ds_name, reg_name)
         torch.save(model, model_file_name)
