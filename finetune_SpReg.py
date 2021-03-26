@@ -307,9 +307,13 @@ class PrunningFineTuner_VGG16:
 
         # print("Finished. Going to fine tune the model a bit more")
         # self.train(optimizer, epoches=5) # M.Amintoosi 15->3
-        models_dir = 'models/'
+        # models_dir = 'models/'
         # torch.save(model.state_dict(), models_dir+"painting_model_prunned.pt")
-        torch.save(model, models_dir+"VGG_model_COVID19_prunned.pt")
+        # torch.save(model, models_dir+"VGG_model_COVID19_prunned.pt")
+        global args
+        model_file_name = '{}VGG_model_{}_reg-{}_pruned.pt'.format(args.models_dir, \
+            args.ds_name, args.reg_name)
+        torch.save(model, model_file_name)
 
 def get_args():
     parser = argparse.ArgumentParser()
@@ -319,7 +323,7 @@ def get_args():
     parser.add_argument("--train_path", type = str, default = "data/train")
     parser.add_argument("--test_path", type = str, default = "data/test")
     parser.add_argument('--use-cuda', action='store_true', default=False, help='Use NVIDIA GPU acceleration')    
-    parser.add_argument('--use-reg', type = str, default = None)
+    parser.add_argument('--reg_name', type = str, default = None)
     parser.set_defaults(train=False)
     parser.set_defaults(prune=False)
     args = parser.parse_args()
@@ -328,25 +332,35 @@ def get_args():
     return args
 
 if __name__ == '__main__':
+    global args 
     args = get_args()
-    models_dir = 'models/'
+    args.models_dir = 'models/'
+    args.ds_name = 'COVID19'
+    args.pasvand = args.reg_name if args.reg_name is not None else 'non'
+    reg_name = args.reg_name
 
     if args.train:
         model = ModifiedVGG16Model()
     elif args.prune:
-        model = torch.load(models_dir+"VGG_model_COVID19.pt", map_location=lambda storage, loc: storage)
+        model_file_name = '{}VGG_model_{}_reg-{}.pt'.format(args.models_dir, \
+            args.ds_name, args.reg_name)
+        model = torch.load(model_file_name, map_location=lambda storage, loc: storage)
+        # model = torch.load(models_dir+"VGG_model_COVID19.pt", map_location=lambda storage, loc: storage)
     elif args.test:
-        model = torch.load(models_dir+"VGG_model_COVID19_prunned.pt", map_location=lambda storage, loc: storage)
+        model_file_name = '{}VGG_model_{}_reg-{}_pruned.pt'.format(args.models_dir, \
+            args.ds_name, args.reg_name)
+        model = torch.load(model_file_name, map_location=lambda storage, loc: storage)
+        # model = torch.load(models_dir+"VGG_model_COVID19_prunned.pt", map_location=lambda storage, loc: storage)
         # model = torch.load(models_dir+"painting_model_reg_prunned.pt", map_location=lambda storage, loc: storage)
     
     if args.use_cuda:
         model = model.cuda()
         print('Using CUDA...')
     
-    if args.train and args.use_reg:
+    if args.train and args.reg_name is not None:
         device = torch.device("cuda" if args.use_cuda else "cpu") #
         regularization = sparse_regularization(model,device)
-        reg_name = 'HSQGL12'
+        # reg_name = 'HSQGL12'
         if reg_name == 'L2':
             regularizationFun = regularization.l2_regularization
         elif reg_name == 'L1':
@@ -361,7 +375,9 @@ if __name__ == '__main__':
 
     if args.train:
         fine_tuner.train(epoches=15, regularization=regularizationFun)
-        torch.save(model, models_dir+"VGG_model_COVID19.pt")
+        model_file_name = '{}VGG_model_{}_reg-{}.pt'.format(args.models_dir, \
+            args.ds_name, reg_name)
+        torch.save(model, model_file_name)
     elif args.prune:
         fine_tuner.prune()
     elif args.test:
