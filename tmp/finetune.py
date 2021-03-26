@@ -18,6 +18,8 @@ from heapq import nsmallest
 import time
 import matplotlib.pyplot as plt
 
+from sparse_reg import sparse_regularization
+
 class ModifiedVGG16Model(torch.nn.Module):
     def __init__(self):
         super(ModifiedVGG16Model, self).__init__()
@@ -135,6 +137,8 @@ class PrunningFineTuner_VGG16:
         self.criterion = torch.nn.CrossEntropyLoss()
         self.prunner = FilterPrunner(self.model) 
         self.model.train()
+        self.regularization = sparse_regularization(model, device)
+
 
     def test(self):
         # return
@@ -193,18 +197,18 @@ class PrunningFineTuner_VGG16:
         
         self.model.train()
 
-    def train(self, optimizer = None, epoches=10):
+    def train(self, optimizer = None, epoches=10, HGSR=None):
         if optimizer is None:
             optimizer = optim.SGD(model.classifier.parameters(), lr=0.0001, momentum=0.9)
 
         for i in range(epoches):
             print("Epoch: ", i, '/', epoches)
-            self.train_epoch(optimizer)
+            self.train_epoch(optimizer, HGSR=None)
             self.test()
         print("Finished fine tuning.")
         
 
-    def train_batch(self, optimizer, batch, label, rank_filters):
+    def train_batch(self, optimizer, batch, label, rank_filters, HGSR=None):
 
         if args.use_cuda:
             batch = batch.cuda()
@@ -213,16 +217,23 @@ class PrunningFineTuner_VGG16:
         self.model.zero_grad()
         input = Variable(batch)
 
+        # در اینجا باید تابع هزینه روش سلسله مراتبی رو اضافه کرد
         if rank_filters:
             output = self.prunner.forward(input)
             self.criterion(output, Variable(label)).backward()
         else:
-            self.criterion(self.model(input), Variable(label)).backward()
+            # self.criterion(self.model(input), Variable(label)).backward()
+            loss = self.criterion(self.model(input), Variable(label))
+            if HGSR is not None:
+                lambda1, lambda2 = 0.001, 0.5
+                loss += lambda2*self.regularization.hierarchical_squared_group_l12_regularization(lambda1)
+                loss += (1-lambda2)*self.regularization.l1_regularization(lambda1)
+            loss.backward()
             optimizer.step()
 
-    def train_epoch(self, optimizer = None, rank_filters = False):
+    def train_epoch(self, optimizer = None, rank_filters = False, HGSR=None):
         for i, (batch, label) in enumerate(self.train_data_loader):
-            self.train_batch(optimizer, batch, label, rank_filters)
+            self.train_batch(optimizer, batch, label, rank_filters, HGSR)
 
     def get_candidates_to_prune(self, num_filters_to_prune):
         self.prunner.reset()
@@ -306,6 +317,8 @@ def get_args():
 
 if __name__ == '__main__':
     args = get_args()
+
+    device = torch.device("cuda" if args.use_cuda else "cpu")
 
     if args.train:
         model = ModifiedVGG16Model()
