@@ -310,13 +310,11 @@ class PrunningFineTuner_VGG16:
         # models_dir = 'models/'
         # torch.save(model.state_dict(), models_dir+"painting_model_prunned.pt")
         # torch.save(model, models_dir+"VGG_model_COVID19_prunned.pt")
-        global args
         model_file_name = '{}VGG_model_{}_reg-{}_pruned.pt'.format(args.models_dir, \
             args.ds_name, args.reg_name)
         torch.save(model, model_file_name)
 
 def get_args():
-    global args
     parser = argparse.ArgumentParser()
     parser.add_argument("--train", dest="train", action="store_true")
     parser.add_argument("--prune", dest="prune", action="store_true")
@@ -333,7 +331,7 @@ def get_args():
     return args
 
 if __name__ == '__main__':
-    global args 
+    # global args 
     args = get_args()
     args.models_dir = 'models/'
     args.ds_name = 'COVID19'
@@ -375,7 +373,7 @@ if __name__ == '__main__':
     fine_tuner = PrunningFineTuner_VGG16(args.train_path, args.test_path, model)
 
     if args.train:
-        fine_tuner.train(epoches=15, regularization=regularizationFun)
+        fine_tuner.train(epoches=15, regularization=regularizationFun, args=args)
         model_file_name = '{}VGG_model_{}_reg-{}.pt'.format(args.models_dir, \
             args.ds_name, reg_name)
         torch.save(model, model_file_name)
