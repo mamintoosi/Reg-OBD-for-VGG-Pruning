@@ -316,6 +316,7 @@ class PrunningFineTuner_VGG16:
         torch.save(model, model_file_name)
 
 def get_args():
+    global args
     parser = argparse.ArgumentParser()
     parser.add_argument("--train", dest="train", action="store_true")
     parser.add_argument("--prune", dest="prune", action="store_true")
