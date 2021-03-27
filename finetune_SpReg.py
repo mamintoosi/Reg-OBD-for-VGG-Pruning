@@ -240,9 +240,21 @@ class PrunningFineTuner_VGG16:
             #     loss += 0.001*regularization(0.05)
             loss.backward()
         else:
+
             loss = self.criterion(self.model(input), Variable(label))
-            if regularization is not None:
-                loss += 1*regularization(0.5)
+            # if regularization is not None:
+            reg_name = args.reg_name
+            if reg_name is not None:
+                device = torch.device("cuda" if args.use_cuda else "cpu") #
+                regularization = sparse_regularization(self.model,device)
+                if reg_name == 'L2':
+                    regularizationFun = regularization.l2_regularization
+                elif reg_name == 'L1':
+                    regularizationFun = regularization.l1_regularization
+                elif reg_name == 'HSQGL12':
+                    regularizationFun = regularization.hierarchical_squared_group_l12_regularization
+                # print('Using Regularization: ',reg_name)
+                loss += 0.001*regularizationFun(0.5)
                 print('Regularization coef:', 1*regularization(0.5))
             loss.backward()
             optimizer.step()
@@ -360,24 +372,24 @@ if __name__ == '__main__':
         model = model.cuda()
         print('Using CUDA...')
     
-    if args.train and args.reg_name is not None:
-        device = torch.device("cuda" if args.use_cuda else "cpu") #
-        regularization = sparse_regularization(model,device)
-        # reg_name = 'HSQGL12'
-        if reg_name == 'L2':
-            regularizationFun = regularization.l2_regularization
-        elif reg_name == 'L1':
-            regularizationFun = regularization.l1_regularization
-        elif reg_name == 'HSQGL12':
-            regularizationFun = regularization.hierarchical_squared_group_l12_regularization
-        print('Using Regularization: ',reg_name)
-    else:
-        regularizationFun = None
+    # if args.train and args.reg_name is not None:
+    #     device = torch.device("cuda" if args.use_cuda else "cpu") #
+    #     regularization = sparse_regularization(model,device)
+    #     # reg_name = 'HSQGL12'
+    #     if reg_name == 'L2':
+    #         regularizationFun = regularization.l2_regularization
+    #     elif reg_name == 'L1':
+    #         regularizationFun = regularization.l1_regularization
+    #     elif reg_name == 'HSQGL12':
+    #         regularizationFun = regularization.hierarchical_squared_group_l12_regularization
+    #     print('Using Regularization: ',reg_name)
+    # else:
+    #     regularizationFun = None
 
     fine_tuner = PrunningFineTuner_VGG16(args.train_path, args.test_path, model)
 
     if args.train:
-        fine_tuner.train(epoches=args.train_epoch, regularization=regularizationFun)
+        fine_tuner.train(epoches=args.train_epoch)#, regularization=regularizationFun)
         model_file_name = '{}VGG_model_{}_reg-{}.pt'.format(args.models_dir, \
             args.ds_name, reg_name)
         torch.save(model, model_file_name)
