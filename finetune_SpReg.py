@@ -334,7 +334,7 @@ if __name__ == '__main__':
     # global args 
     args = get_args()
     args.models_dir = 'models/'
-    args.ds_name = 'COVID19'
+    args.ds_name = 'COVID-CT' #'COVID-Radiography'
     args.pasvand = args.reg_name if args.reg_name is not None else 'non'
     reg_name = args.reg_name
 
