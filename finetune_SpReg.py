@@ -245,8 +245,8 @@ class PrunningFineTuner_VGG16:
             # print(loss)
             if regularization is not None:
                 # print('Using Regularization: ',reg_name)
-                loss += 1e-3*regularization(0.5)
-                print('loss, Regularization coef:', loss, 1e-3*regularization(0.5))
+                loss += 1e-6*regularization(0.5)
+                print('loss, Regularization coef:', loss, 1e-6*regularization(0.5))
             loss.backward()
             optimizer.step()
 
@@ -349,7 +349,7 @@ class PrunningFineTuner_VGG16:
 
         print("Number of prunning iterations to reduce 75% filters", iterations)
 
-        for i in range(iterations):
+        for i in range(2):#iterations):
             print("Iter: ", i, '/', iterations)
             print("Retraining with regularization ... ")
             optimizer = optim.SGD(self.model.parameters(), lr=0.001, momentum=0.9)
