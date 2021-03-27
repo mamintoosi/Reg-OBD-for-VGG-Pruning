@@ -242,6 +242,7 @@ class PrunningFineTuner_VGG16:
         else:
 
             loss = self.criterion(self.model(input), Variable(label))
+            print(loss)
             # if regularization is not None:
             reg_name = args.reg_name
             if reg_name is not None:
@@ -255,7 +256,7 @@ class PrunningFineTuner_VGG16:
                     regularizationFun = regularization.hierarchical_squared_group_l12_regularization
                 # print('Using Regularization: ',reg_name)
                 loss += 0.001*regularizationFun(0.5)
-                print('Regularization coef:', 1*regularizationFun(0.5))
+                print('loss, Regularization coef:', loss, 0.001*regularizationFun(0.5))
             loss.backward()
             optimizer.step()
 
