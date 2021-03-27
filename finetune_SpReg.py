@@ -216,7 +216,7 @@ class PrunningFineTuner_VGG16:
         print("Finished fine tuning.")
         
 
-    def train_epoch(self, optimizer = None, rank_filters = False,regularization = None):
+    def train_epoch(self, optimizer = None, rank_filters = False, regularization = None):
         for i, (batch, label) in enumerate(self.train_data_loader):
             # print(batch.shape,label.shape)
             # break
@@ -242,7 +242,7 @@ class PrunningFineTuner_VGG16:
         else:
             loss = self.criterion(self.model(input), Variable(label))
             if regularization is not None:
-                loss += 0.001*regularization(0.5)
+                loss += 0.01*regularization(0.5)
             loss.backward()
             optimizer.step()
 
@@ -335,8 +335,8 @@ def get_args():
 if __name__ == '__main__':
     # global args 
     args = get_args()
-    args.models_dir = 'C:/Archive/data/models/covid/'
-    # args.models_dir = 'models/'
+    # args.models_dir = 'C:/Archive/data/models/covid/'
+    args.models_dir = 'models/'
     # args.ds_name = 'COVID-CT' #'COVID-Radiography'
     # args.pasvand = args.reg_name if args.reg_name is not None else 'non'
     reg_name = args.reg_name
