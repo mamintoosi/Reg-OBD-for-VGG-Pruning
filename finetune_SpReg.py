@@ -245,8 +245,8 @@ class PrunningFineTuner_VGG16:
             # print(loss)
             if regularization is not None:
                 # print('Using Regularization: ',reg_name)
-                loss += 1e-6*regularization(0.5)
-                print('loss, Regularization coef:', loss, 1e-6*regularization(0.5))
+                loss += 1e-8*regularization(0.5)
+                print('loss, Regularization coef:', loss, 1e-8*regularization(0.5))
             loss.backward()
             optimizer.step()
 
