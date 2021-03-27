@@ -255,8 +255,8 @@ class PrunningFineTuner_VGG16:
                 elif reg_name == 'HSQGL12':
                     regularizationFun = regularization.hierarchical_squared_group_l12_regularization
                 # print('Using Regularization: ',reg_name)
-                loss += 0.001*regularizationFun(0.5)
-                print('loss, Regularization coef:', loss, 0.001*regularizationFun(0.5))
+                loss += 1e-8*regularizationFun(0.5)
+                print('loss, Regularization coef:', loss, 1e-8*regularizationFun(0.5))
             loss.backward()
             optimizer.step()
 
