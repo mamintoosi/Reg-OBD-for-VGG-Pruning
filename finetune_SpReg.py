@@ -323,6 +323,8 @@ def get_args():
     parser.add_argument("--test_path", type = str, default = "data/test")
     parser.add_argument('--use-cuda', action='store_true', default=False, help='Use NVIDIA GPU acceleration')    
     parser.add_argument('--reg_name', type = str, default = None)
+    parser.add_argument('--ds_name', type = str, default = 'COVID-CT')
+    parser.add_argument("--train_epoch", type = int, default = 15)
     parser.set_defaults(train=False)
     parser.set_defaults(prune=False)
     args = parser.parse_args()
@@ -334,7 +336,7 @@ if __name__ == '__main__':
     # global args 
     args = get_args()
     args.models_dir = 'models/'
-    args.ds_name = 'COVID-CT' #'COVID-Radiography'
+    # args.ds_name = 'COVID-CT' #'COVID-Radiography'
     args.pasvand = args.reg_name if args.reg_name is not None else 'non'
     reg_name = args.reg_name
 
@@ -373,7 +375,7 @@ if __name__ == '__main__':
     fine_tuner = PrunningFineTuner_VGG16(args.train_path, args.test_path, model)
 
     if args.train:
-        fine_tuner.train(epoches=15, regularization=regularizationFun)
+        fine_tuner.train(epoches=args.train_epoch, regularization=regularizationFun)
         model_file_name = '{}VGG_model_{}_reg-{}.pt'.format(args.models_dir, \
             args.ds_name, reg_name)
         torch.save(model, model_file_name)
