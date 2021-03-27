@@ -247,16 +247,20 @@ class PrunningFineTuner_VGG16:
             reg_name = args.reg_name
             if reg_name is not None:
                 device = torch.device("cuda" if args.use_cuda else "cpu") #
+                x = 0
                 regularization = sparse_regularization(self.model,device)
                 if reg_name == 'L2':
                     regularizationFun = regularization.l2_regularization
                 elif reg_name == 'L1':
-                    regularizationFun = regularization.l1_regularization
+                    # regularizationFun = regularization.l1_regularization
+                    for n, _module in self.model.named_modules():
+                        if isinstance(_module, nn.Conv2d) and (not 'downsample' in n):
+                            x += 0.5*torch.norm(torch.flatten(_module.weight), 1)
                 elif reg_name == 'HSQGL12':
                     regularizationFun = regularization.hierarchical_squared_group_l12_regularization
                 # print('Using Regularization: ',reg_name)
-                loss += 1e-8*regularizationFun(0.5)
-                print('loss, Regularization coef:', loss, 1e-8*regularizationFun(0.5))
+                loss += 1e-4*x #regularizationFun(0.5)
+                print('loss, Regularization coef:', loss, 1e-4*x)
             loss.backward()
             optimizer.step()
 
