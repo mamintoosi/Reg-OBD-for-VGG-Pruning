@@ -242,25 +242,11 @@ class PrunningFineTuner_VGG16:
         else:
 
             loss = self.criterion(self.model(input), Variable(label))
-            print(loss)
-            # if regularization is not None:
-            reg_name = args.reg_name
-            if reg_name is not None:
-                device = torch.device("cuda" if args.use_cuda else "cpu") #
-                x = 0
-                regularization = sparse_regularization(self.model,device)
-                if reg_name == 'L2':
-                    regularizationFun = regularization.l2_regularization
-                elif reg_name == 'L1':
-                    # regularizationFun = regularization.l1_regularization
-                    for n, _module in model.named_modules():
-                        if isinstance(_module, nn.Conv2d) and (not 'downsample' in n):
-                            x += 0.5*torch.norm(torch.flatten(_module.weight), 1)
-                elif reg_name == 'HSQGL12':
-                    regularizationFun = regularization.hierarchical_squared_group_l12_regularization
+            # print(loss)
+            if regularization is not None:
                 # print('Using Regularization: ',reg_name)
-                loss += 1e-4*x #regularizationFun(0.5)
-                print('loss, Regularization coef:', loss, 1e-4*x)
+                loss += 1e-3*regularization(0.5)
+                print('loss, Regularization coef:', loss, 1e-3*regularization(0.5))
             loss.backward()
             optimizer.step()
 
@@ -332,6 +318,47 @@ class PrunningFineTuner_VGG16:
             args.ds_name, args.reg_name)
         torch.save(model, model_file_name)
 
+    def prune_reg(self):
+        if args.reg_name is not None:
+            device = torch.device("cuda" if args.use_cuda else "cpu") #
+            regularization = sparse_regularization(self.model,device)
+            # reg_name = 'HSQGL12'
+            if reg_name == 'L2':
+                regularizationFun = regularization.l2_regularization
+            elif reg_name == 'L1':
+                regularizationFun = regularization.l1_regularization
+            elif reg_name == 'HSQGL12':
+                regularizationFun = regularization.hierarchical_squared_group_l12_regularization
+            print('Using Regularization: ',reg_name)
+        else:
+            regularizationFun = None
+
+        #Get the accuracy before prunning
+        self.test()
+        self.model.train()
+
+        #Make sure all the layers are trainable
+        for param in self.model.features.parameters():
+            param.requires_grad = True
+
+        number_of_filters = self.total_num_filters()
+        num_filters_to_prune_per_iteration = 512
+        iterations = int(float(number_of_filters) / num_filters_to_prune_per_iteration)
+
+        iterations = int(iterations * 7.5 / 10) # M.Amintoosi
+
+        print("Number of prunning iterations to reduce 75% filters", iterations)
+
+        for i in range(iterations):
+            print("Iter: ", i, '/', iterations)
+            print("Retraining with regularization ... ")
+            optimizer = optim.SGD(self.model.parameters(), lr=0.001, momentum=0.9)
+            self.train(optimizer, epoches = 10, regularization = regularizationFun)
+
+        model_file_name = '{}VGG_model_{}_reg-{}.pt'.format(args.models_dir, \
+            args.ds_name, args.reg_name)
+        torch.save(model, model_file_name)
+
 def get_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--train", dest="train", action="store_true")
@@ -362,13 +389,19 @@ if __name__ == '__main__':
     if args.train:
         model = ModifiedVGG16Model()
     elif args.prune:
-        model_file_name = '{}VGG_model_{}_reg-{}.pt'.format(args.models_dir, \
-            args.ds_name, args.reg_name)
+        model_file_name = '{}VGG_model_{}.pt'.format(args.models_dir, \
+            args.ds_name)
         model = torch.load(model_file_name, map_location=lambda storage, loc: storage)
         # model = torch.load(models_dir+"VGG_model_COVID19.pt", map_location=lambda storage, loc: storage)
     elif args.test:
-        model_file_name = '{}VGG_model_{}_reg-{}_pruned.pt'.format(args.models_dir, \
-            args.ds_name, args.reg_name)
+        pasvand = ''
+        if args.reg_name is not None:
+            pasvand = '_reg-{}'.format(args.reg_name)
+        if args.prune:
+            pasvand += '_pruned'
+
+        model_file_name = '{}VGG_model_{}{}.pt'.format(args.models_dir, \
+            args.ds_name, pasvand)
         model = torch.load(model_file_name, map_location=lambda storage, loc: storage)
         # model = torch.load(models_dir+"VGG_model_COVID19_prunned.pt", map_location=lambda storage, loc: storage)
         # model = torch.load(models_dir+"painting_model_reg_prunned.pt", map_location=lambda storage, loc: storage)
@@ -377,29 +410,19 @@ if __name__ == '__main__':
         model = model.cuda()
         print('Using CUDA...')
     
-    # if args.train and args.reg_name is not None:
-    #     device = torch.device("cuda" if args.use_cuda else "cpu") #
-    #     regularization = sparse_regularization(model,device)
-    #     # reg_name = 'HSQGL12'
-    #     if reg_name == 'L2':
-    #         regularizationFun = regularization.l2_regularization
-    #     elif reg_name == 'L1':
-    #         regularizationFun = regularization.l1_regularization
-    #     elif reg_name == 'HSQGL12':
-    #         regularizationFun = regularization.hierarchical_squared_group_l12_regularization
-    #     print('Using Regularization: ',reg_name)
-    # else:
-    #     regularizationFun = None
-
     fine_tuner = PrunningFineTuner_VGG16(args.train_path, args.test_path, model)
 
-    if args.train:
+    if args.train:            
         fine_tuner.train(epoches=args.train_epoch)#, regularization=regularizationFun)
-        model_file_name = '{}VGG_model_{}_reg-{}.pt'.format(args.models_dir, \
-            args.ds_name, reg_name)
+        model_file_name = '{}VGG_model_{}.pt'.format(args.models_dir, \
+            args.ds_name)
         torch.save(model, model_file_name)
     elif args.prune:
-        fine_tuner.prune()
+        if args.reg_name is None:
+            fine_tuner.prune()
+        else:
+            fine_tuner.prune_reg()
+
     elif args.test:
         fine_tuner.eval_test_results()
 
