@@ -179,13 +179,13 @@ class PrunningFineTuner_VGG16:
             if args.use_cuda:
                 batch = batch.cuda()
             # print(pred.cpu().eq(label).sum())
-            if count[label]>=5:
-                continue
             output = model(Variable(batch))
             pred = output.data.max(1)[1]
             correct += pred.cpu().eq(label).sum()
             isPredCorrect = pred.cpu().eq(label)
             total += label.size(0)
+            if count[label]>=5:
+                continue
             count[label]+=1
             plt.subplot(2,5,5*label+count[label])
             plt.xticks([])
@@ -242,7 +242,8 @@ class PrunningFineTuner_VGG16:
         else:
             loss = self.criterion(self.model(input), Variable(label))
             if regularization is not None:
-                loss += 0.01*regularization(0.5)
+                loss += 1*regularization(0.5)
+                print('Regularization is done...')
             loss.backward()
             optimizer.step()
 
