@@ -253,7 +253,7 @@ class PrunningFineTuner_VGG16:
                     regularizationFun = regularization.l2_regularization
                 elif reg_name == 'L1':
                     # regularizationFun = regularization.l1_regularization
-                    for n, _module in self.model.named_modules():
+                    for n, _module in model.named_modules():
                         if isinstance(_module, nn.Conv2d) and (not 'downsample' in n):
                             x += 0.5*torch.norm(torch.flatten(_module.weight), 1)
                 elif reg_name == 'HSQGL12':
