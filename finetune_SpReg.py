@@ -165,10 +165,10 @@ class PrunningFineTuner_VGG16:
         self.model.train()
 
     def eval_test_results(self):
-        # class_names = ['impressionism','miniature']
-        class_names = ['امپرسیونیسم','مینیاتور']
+        class_names = ['COVID','Non']
+        # class_names = ['امپرسیونیسم','مینیاتور']
         plt.figure(figsize=(25,10))
-        plt.rcParams["font.family"] = "B Nazanin"
+        # plt.rcParams["font.family"] = "B Nazanin"
         count = np.zeros(2)
 
         self.model.eval()
@@ -335,9 +335,10 @@ def get_args():
 if __name__ == '__main__':
     # global args 
     args = get_args()
-    args.models_dir = 'models/'
+    args.models_dir = 'C:/Archive/data/models/covid/'
+    # args.models_dir = 'models/'
     # args.ds_name = 'COVID-CT' #'COVID-Radiography'
-    args.pasvand = args.reg_name if args.reg_name is not None else 'non'
+    # args.pasvand = args.reg_name if args.reg_name is not None else 'non'
     reg_name = args.reg_name
 
     if args.train:

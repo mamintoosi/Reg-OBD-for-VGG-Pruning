@@ -209,3 +209,4 @@ class sparse_regularization(object):
                 # hierarchical squared group l1/2 regularization based on the neuron wise grouping
                 #x+= _lambda*torch.sum((torch.sum(torch.sqrt(p),1))**2)
         return x
+# to do: استفاده از نرم بلوکی - البته اگه بشه در تورچ نوشت
