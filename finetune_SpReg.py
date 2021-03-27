@@ -243,7 +243,7 @@ class PrunningFineTuner_VGG16:
             loss = self.criterion(self.model(input), Variable(label))
             if regularization is not None:
                 loss += 1*regularization(0.5)
-                print('Regularization is done...')
+                print('Regularization coef:', 1*regularization(0.5))
             loss.backward()
             optimizer.step()
 
