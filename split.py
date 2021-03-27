@@ -8,4 +8,7 @@ import splitfolders  # or import split_folders
 # To only split into training and validation set, use a single number to `fixed`, i.e., `10`.
 splitfolders.fixed("C:/temp/Covid19/COVID-19_Radiography_Dataset", \
      output="C:/temp/git/OBD-for-VGG-Pruning-COVID19/data/COVID-Radiography", \
-         seed=1337, fixed=(1000, 100, 100), oversample=False, group_prefix=None) # default values
+         seed=1337, fixed=(100, 100), oversample=False, group_prefix=None) # default values
+
+# از مجموعه داده زیر:
+# https://www.kaggle.com/tawsifurrahman/covid19-radiography-database         
