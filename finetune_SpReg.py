@@ -353,7 +353,7 @@ class PrunningFineTuner_VGG16:
             # print("Iter: ", i, '/', iterations)
         print("Retraining with regularization ... ")
         optimizer = optim.SGD(self.model.parameters(), lr=0.001, momentum=0.9)
-        self.train(optimizer, epoches = 10, regularization = regularizationFun)
+        self.train(optimizer, epoches = args.train_epoch, regularization = regularizationFun)
 
         model_file_name = '{}VGG_model_{}_reg-{}.pt'.format(args.models_dir, \
             args.ds_name, args.reg_name)
@@ -388,23 +388,22 @@ if __name__ == '__main__':
 
     if args.train:
         model = ModifiedVGG16Model()
-    elif args.prune:
-        model_file_name = '{}VGG_model_{}.pt'.format(args.models_dir, \
-            args.ds_name)
-        model = torch.load(model_file_name, map_location=lambda storage, loc: storage)
-        # model = torch.load(models_dir+"VGG_model_COVID19.pt", map_location=lambda storage, loc: storage)
     elif args.test:
         pasvand = ''
         if args.reg_name is not None:
             pasvand = '_reg-{}'.format(args.reg_name)
         if args.prune:
             pasvand += '_pruned'
-
         model_file_name = '{}VGG_model_{}{}.pt'.format(args.models_dir, \
             args.ds_name, pasvand)
         model = torch.load(model_file_name, map_location=lambda storage, loc: storage)
         # model = torch.load(models_dir+"VGG_model_COVID19_prunned.pt", map_location=lambda storage, loc: storage)
         # model = torch.load(models_dir+"painting_model_reg_prunned.pt", map_location=lambda storage, loc: storage)
+    elif args.prune:
+        model_file_name = '{}VGG_model_{}.pt'.format(args.models_dir, \
+            args.ds_name)
+        model = torch.load(model_file_name, map_location=lambda storage, loc: storage)
+        # model = torch.load(models_dir+"VGG_model_COVID19.pt", map_location=lambda storage, loc: storage)
     
     if args.use_cuda:
         model = model.cuda()
