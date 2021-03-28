@@ -316,7 +316,7 @@ class PrunningFineTuner_VGG16:
         # torch.save(model, models_dir+"VGG_model_COVID19_prunned.pt")
         # model_file_name = '{}_prnIn_{}_reg-{}_pruned.pt'.format(args.models_dir, \
         #     args.prune_input,args.ds_name, args.reg_name)
-        model_file_name = args.output_model            
+        model_file_name = '{}{}.pt'.format(args.models_dir,args.output_model)
         torch.save(model, model_file_name)
 
     def prune_reg(self):
@@ -358,7 +358,7 @@ class PrunningFineTuner_VGG16:
 
         # model_file_name = '{}_prnIn-{}_{}_reg-{}.pt'.format(args.models_dir, \
         #     args.prune_input,args.ds_name, args.reg_name)
-        model_file_name = args.output_model
+        model_file_name = '{}{}.pt'.format(args.models_dir,args.output_model)
         torch.save(model, model_file_name)
 
 def get_args():
@@ -393,7 +393,9 @@ if __name__ == '__main__':
 
     if args.train:
         model = ModifiedVGG16Model()
-    elif args.test:
+    elif args.test or args.prune:
+        model_file_name = '{}{}.pt'.format(args.models_dir, args.input_model)
+        model = torch.load(model_file_name, map_location=lambda storage, loc: storage)
         # pasvand = ''
         # if args.reg_name is not None:
         #     pasvand = '_reg-{}'.format(args.reg_name)
@@ -401,23 +403,21 @@ if __name__ == '__main__':
         #     pasvand += '_pruned'
         # model_file_name = '{}VGG_model_{}{}.pt'.format(args.models_dir, \
         #     args.ds_name, pasvand)
-        model_file_name = args.input_model
-        model = torch.load(model_file_name, map_location=lambda storage, loc: storage)
         # model = torch.load(models_dir+"VGG_model_COVID19_prunned.pt", map_location=lambda storage, loc: storage)
         # model = torch.load(models_dir+"painting_model_reg_prunned.pt", map_location=lambda storage, loc: storage)
-    elif args.prune:
-        # if args.prune_input is None or args.prune_input == 'vgg':
-        #     model_file_name = '{}VGG_model_{}.pt'.format(args.models_dir, \
-        #     args.ds_name)
-        # elif args.prune_input == 'taylor':
-        #     model_file_name = '{}VGG_model_{}_reg-{}_pruned.pt'.format(args.models_dir, \
-        #     args.ds_name,args.reg_name)
-        # elif args.prune_input == 'reg':
-        #     model_file_name = '{}VGG_model_{}_reg-{}.pt'.format(args.models_dir, \
-        #     args.ds_name,args.reg_name)
-        model_file_name = args.input_model
-        model = torch.load(model_file_name, map_location=lambda storage, loc: storage)
-        # model = torch.load(models_dir+"VGG_model_COVID19.pt", map_location=lambda storage, loc: storage)
+    # elif args.prune:
+    #     # if args.prune_input is None or args.prune_input == 'vgg':
+    #     #     model_file_name = '{}VGG_model_{}.pt'.format(args.models_dir, \
+    #     #     args.ds_name)
+    #     # elif args.prune_input == 'taylor':
+    #     #     model_file_name = '{}VGG_model_{}_reg-{}_pruned.pt'.format(args.models_dir, \
+    #     #     args.ds_name,args.reg_name)
+    #     # elif args.prune_input == 'reg':
+    #     #     model_file_name = '{}VGG_model_{}_reg-{}.pt'.format(args.models_dir, \
+    #     #     args.ds_name,args.reg_name)
+    #     model_file_name = '{}{}.pt'.format(args.models_dir,args.input_model)
+    #     model = torch.load(model_file_name, map_location=lambda storage, loc: storage)
+    #     # model = torch.load(models_dir+"VGG_model_COVID19.pt", map_location=lambda storage, loc: storage)
     
     if args.use_cuda:
         model = model.cuda()
@@ -427,7 +427,7 @@ if __name__ == '__main__':
 
     if args.train:            
         fine_tuner.train(epoches=args.train_epoch)#, regularization=regularizationFun)
-        model_file_name = args.output_model
+        model_file_name = '{}{}.pt'.format(args.models_dir,args.output_model)
         # model_file_name = '{}VGG_model_{}.pt'.format(args.models_dir, \
         #     args.ds_name)
         torch.save(model, model_file_name)
