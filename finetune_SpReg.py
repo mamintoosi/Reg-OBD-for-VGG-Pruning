@@ -306,7 +306,7 @@ class PrunningFineTuner_VGG16:
             self.test()
             print("Fine tuning to recover from prunning iteration.")
             optimizer = optim.SGD(self.model.parameters(), lr=0.001, momentum=0.9)
-            self.train(optimizer, epoches = 6)
+            self.train(optimizer, epoches = 5)
 
 
         # print("Finished. Going to fine tune the model a bit more")
@@ -385,8 +385,8 @@ def get_args():
 if __name__ == '__main__':
     # global args 
     args = get_args()
-    # args.models_dir = 'C:/Archive/data/models/covid/'
-    args.models_dir = 'models/'
+    args.models_dir = 'C:/Archive/data/models/covid/'
+    # args.models_dir = 'models/'
     # args.ds_name = 'COVID-CT' #'COVID-Radiography'
     # args.pasvand = args.reg_name if args.reg_name is not None else 'non'
     reg_name = args.reg_name
