@@ -306,7 +306,7 @@ class PrunningFineTuner_VGG16:
             self.test()
             print("Fine tuning to recover from prunning iteration.")
             optimizer = optim.SGD(self.model.parameters(), lr=0.001, momentum=0.9)
-            self.train(optimizer, epoches = 10)
+            self.train(optimizer, epoches = 6)
 
 
         # print("Finished. Going to fine tune the model a bit more")
