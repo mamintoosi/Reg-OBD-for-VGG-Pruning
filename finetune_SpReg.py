@@ -155,7 +155,7 @@ class PrunningFineTuner_VGG16:
         for i, (batch, label) in enumerate(self.test_data_loader):
             if args.use_cuda:
                 batch = batch.cuda()
-            output = model(Variable(batch))
+            output = self.model(Variable(batch))
             pred = output.data.max(1)[1]
             correct += pred.cpu().eq(label).sum()
             total += label.size(0)
@@ -179,7 +179,7 @@ class PrunningFineTuner_VGG16:
             if args.use_cuda:
                 batch = batch.cuda()
             # print(pred.cpu().eq(label).sum())
-            output = model(Variable(batch))
+            output = self.model(Variable(batch))
             pred = output.data.max(1)[1]
             correct += pred.cpu().eq(label).sum()
             isPredCorrect = pred.cpu().eq(label)
@@ -210,7 +210,7 @@ class PrunningFineTuner_VGG16:
             optimizer = optim.SGD(model.classifier.parameters(), lr=0.0001, momentum=0.9)
 
         for i in range(epoches):
-            print("Epoch: ", i, '/', epoches)
+            print("Epoch: ", i+1, '/', epoches)
             self.train_epoch(optimizer,regularization=regularization)
             self.test()
         print("Finished fine tuning.")
@@ -281,7 +281,7 @@ class PrunningFineTuner_VGG16:
         print("Number of prunning iterations to reduce 75% filters", iterations)
 
         for i in range(iterations):
-            print("Iter: ", i, '/', iterations)
+            print("Iter: ", i+1, '/', iterations)
             print("Ranking filters.. ")
             prune_targets = self.get_candidates_to_prune(num_filters_to_prune_per_iteration)
             layers_prunned = {}
