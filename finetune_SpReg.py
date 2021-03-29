@@ -277,9 +277,9 @@ class PrunningFineTuner_VGG16:
         num_filters_to_prune_per_iteration = 512
         iterations = int(float(number_of_filters) / num_filters_to_prune_per_iteration)
 
-        iterations = int(iterations * 7.5 / 10) # M.Amintoosi
+        iterations = int(iterations * 6 / 10) # M.Amintoosi
 
-        print("Number of prunning iterations to reduce 75% filters", iterations)
+        print("Number of prunning iterations to reduce 60% filters", iterations)
 
         for i in range(iterations):
             print("Iter: ", i+1, '/', iterations)
@@ -347,13 +347,13 @@ class PrunningFineTuner_VGG16:
         for param in self.model.features.parameters():
             param.requires_grad = True
 
-        number_of_filters = self.total_num_filters()
-        num_filters_to_prune_per_iteration = 512
-        iterations = int(float(number_of_filters) / num_filters_to_prune_per_iteration)
+        # number_of_filters = self.total_num_filters()
+        # num_filters_to_prune_per_iteration = 512
+        # iterations = int(float(number_of_filters) / num_filters_to_prune_per_iteration)
 
-        iterations = int(iterations * 60 / 10) # M.Amintoosi
+        # iterations = int(iterations * 6 / 10) # M.Amintoosi
 
-        print("Number of prunning iterations to reduce 60% filters", iterations)
+        # print("Number of prunning iterations to reduce 60% filters", iterations)
 
         # for i in range(1):#iterations):
             # print("Iter: ", i, '/', iterations)
