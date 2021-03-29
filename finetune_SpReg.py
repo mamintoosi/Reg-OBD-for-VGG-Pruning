@@ -276,10 +276,10 @@ class PrunningFineTuner_VGG16:
         number_of_filters = self.total_num_filters()
         num_filters_to_prune_per_iteration = 512
         iterations = int(float(number_of_filters) / num_filters_to_prune_per_iteration)
-
-        iterations = int(iterations * 7.5 / 10) # M.Amintoosi
-
-        print("Number of prunning iterations to reduce 75% filters", iterations)
+        print(number_of_filters, num_filters_to_prune_per_iteration, iterations)
+        iterations = int(iterations * 7. / 10) # M.Amintoosi
+        print(iterations)
+        print("Number of prunning iterations to reduce 70% filters", iterations)
 
         for i in range(iterations):
             print("Iter: ", i+1, '/', iterations)
