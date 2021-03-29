@@ -207,7 +207,8 @@ class PrunningFineTuner_VGG16:
 
     def train(self, optimizer = None, epoches=10, regularization=None):
         if optimizer is None:
-            optimizer = optim.SGD(model.classifier.parameters(), lr=0.0001, momentum=0.9)
+            optimizer = optim.Adam(model.classifier.parameters(), lr=0.0001)
+            # optimizer = optim.SGD(model.classifier.parameters(), lr=0.0001, momentum=0.9)
 
         for i in range(epoches):
             print("Epoch: ", i+1, '/', epoches)
@@ -305,7 +306,8 @@ class PrunningFineTuner_VGG16:
             print("Filters prunned", str(message))
             self.test()
             print("Fine tuning to recover from prunning iteration.")
-            optimizer = optim.SGD(self.model.parameters(), lr=0.001, momentum=0.9)
+            optimizer = optim.Adam(self.model.parameters(), lr=0.001)
+            # optimizer = optim.SGD(self.model.parameters(), lr=0.001, momentum=0.9)
             if args.eat == 'dec':
                 self.train(optimizer, epoches=iterations-i)
             else:
@@ -356,7 +358,8 @@ class PrunningFineTuner_VGG16:
         # for i in range(1):#iterations):
             # print("Iter: ", i, '/', iterations)
         print("Retraining with regularization ... ")
-        optimizer = optim.SGD(self.model.parameters(), lr=0.001, momentum=0.9)
+        optimizer = optim.Adam(self.model.parameters(), lr=0.001)
+        # optimizer = optim.SGD(self.model.parameters(), lr=0.001, momentum=0.9)
         self.train(optimizer, epoches = args.train_epoch, regularization = regularizationFun)
 
         # model_file_name = '{}_prnIn-{}_{}_reg-{}.pt'.format(args.models_dir, \
