@@ -351,7 +351,7 @@ class PrunningFineTuner_VGG16:
         num_filters_to_prune_per_iteration = 512
         iterations = int(float(number_of_filters) / num_filters_to_prune_per_iteration)
 
-        iterations = int(iterations * 7.5 / 10) # M.Amintoosi
+        iterations = int(iterations * 60 / 10) # M.Amintoosi
 
         print("Number of prunning iterations to reduce 75% filters", iterations)
 
