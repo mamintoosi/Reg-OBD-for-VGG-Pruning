@@ -306,7 +306,7 @@ class PrunningFineTuner_VGG16:
             print("Filters prunned", str(message))
             self.test()
             print("Fine tuning to recover from prunning iteration.")
-            optimizer = optim.Adam(self.model.parameters(), lr=0.001)
+            optimizer = optim.Adam(self.model.parameters(), lr=0.0001)
             # optimizer = optim.SGD(self.model.parameters(), lr=0.001, momentum=0.9)
             if args.eat == 'dec':
                 self.train(optimizer, epoches=iterations-i)
@@ -358,7 +358,7 @@ class PrunningFineTuner_VGG16:
         # for i in range(1):#iterations):
             # print("Iter: ", i, '/', iterations)
         print("Retraining with regularization ... ")
-        optimizer = optim.Adam(self.model.parameters(), lr=0.001)
+        optimizer = optim.Adam(self.model.parameters(), lr=0.0001)
         # optimizer = optim.SGD(self.model.parameters(), lr=0.001, momentum=0.9)
         self.train(optimizer, epoches = args.train_epoch, regularization = regularizationFun)
 
