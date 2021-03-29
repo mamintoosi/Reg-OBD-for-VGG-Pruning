@@ -306,7 +306,10 @@ class PrunningFineTuner_VGG16:
             self.test()
             print("Fine tuning to recover from prunning iteration.")
             optimizer = optim.SGD(self.model.parameters(), lr=0.001, momentum=0.9)
-            self.train(optimizer, epoches = 5)
+            if args.eat == 'dec':
+                self.train(optimizer, epoches=iterations-i)
+            else:
+                self.train(optimizer, epoches=int(args.eat))
 
 
         # print("Finished. Going to fine tune the model a bit more")
@@ -375,6 +378,8 @@ def get_args():
     parser.add_argument('--prune_input', type = str, default = 'vgg')
     parser.add_argument('--input_model', type = str, default = 'vgg')
     parser.add_argument('--output_model', type = str, default = 'taylor')
+    # Epochs After tuning: constant or decremental, const, dec
+    parser.add_argument('--eat', type = str, default = '5') 
     parser.set_defaults(train=False)
     parser.set_defaults(prune=False)
     args = parser.parse_args()
