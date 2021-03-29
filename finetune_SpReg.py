@@ -358,8 +358,8 @@ class PrunningFineTuner_VGG16:
         # for i in range(1):#iterations):
             # print("Iter: ", i, '/', iterations)
         print("Retraining with regularization ... ")
-        optimizer = optim.Adam(self.model.parameters(), lr=0.0001)
-        # optimizer = optim.SGD(self.model.parameters(), lr=0.001, momentum=0.9)
+        # optimizer = optim.Adam(self.model.parameters(), lr=0.0001)
+        optimizer = optim.SGD(self.model.parameters(), lr=0.001, momentum=0.9)
         self.train(optimizer, epoches = args.train_epoch, regularization = regularizationFun)
 
         # model_file_name = '{}_prnIn-{}_{}_reg-{}.pt'.format(args.models_dir, \
