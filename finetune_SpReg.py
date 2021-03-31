@@ -191,7 +191,14 @@ class PrunningFineTuner_VGG16:
             plt.xticks([])
             plt.yticks([])
             plt.grid(False)
-            plt.imshow(np.transpose(batch[0].numpy(), (1, 2, 0)))#, cmap=plt.cm.binary)
+
+            inp = np.transpose(batch[0].numpy(), (1, 2, 0))#inp.numpy().transpose((1, 2, 0))
+            mean = [0.485, 0.456, 0.406]
+            std=[0.229, 0.224, 0.225]
+            inp = std * inp + mean
+            inp = np.clip(inp, 0, 1)
+            plt.imshow(inp)
+            # plt.imshow(np.transpose(batch[0].numpy(), (1, 2, 0)))#, cmap=plt.cm.binary)
             if isPredCorrect==True:
                 color = 'blue'
             else:
@@ -393,8 +400,8 @@ def get_args():
 if __name__ == '__main__':
     # global args 
     args = get_args()
-    # args.models_dir = 'C:/Archive/data/models/covid/'
-    args.models_dir = 'models/'
+    args.models_dir = 'C:/Archive/data/models/covid/'
+    # args.models_dir = 'models/'
     # args.ds_name = 'COVID-CT' #'COVID-Radiography'
     # args.pasvand = args.reg_name if args.reg_name is not None else 'non'
     reg_name = args.reg_name
