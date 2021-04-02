@@ -1,6 +1,6 @@
 # OBD-for-VGG-Pruning-COVID19
  Prunning a deep learning model of COVID19 detection
 
-The original files are from:
+## Start Using Google Colab:
 
-https://github.com/jacobgil/pytorch-pruning
+https://colab.research.google.com/github/mamintoosi/OBD-for-VGG-Pruning-COVID19/blob/master/code/main_prune.ipynb
