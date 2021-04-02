@@ -15,14 +15,7 @@ from operator import itemgetter
 from heapq import nsmallest
 import time
 import matplotlib.pyplot as plt
-# from bidi.algorithm import get_display
-# import arabic_reshaper
 from sparse_regularization import sparse_regularization
-
-# def make_farsi_text(x):
-#     reshaped_text = arabic_reshaper.reshape(x)
-#     farsi_text = get_display(reshaped_text)
-#     return farsi_text
 
 class ModifiedVGG16Model(torch.nn.Module):
     def __init__(self):
@@ -44,11 +37,8 @@ class ModifiedVGG16Model(torch.nn.Module):
             nn.Linear(4096, 2))
 
     def forward(self, x):
-        # print('57',x.shape)
         x = self.features(x)
-        # print('49',x.shape)
         x = x.view(x.size(0), -1)
-        # print('51',x.shape)
         x = self.classifier(x)
         return x
 
@@ -165,10 +155,8 @@ class PrunningFineTuner_VGG16:
         self.model.train()
 
     def eval_test_results(self):
-        class_names = ['COVID','Non']
-        # class_names = ['امپرسیونیسم','مینیاتور']
+        class_names = ['COVID','Normal']
         plt.figure(figsize=(25,10))
-        # plt.rcParams["font.family"] = "B Nazanin"
         count = np.zeros(2)
 
         self.model.eval()
@@ -198,15 +186,11 @@ class PrunningFineTuner_VGG16:
             inp = std * inp + mean
             inp = np.clip(inp, 0, 1)
             plt.imshow(inp)
-            # plt.imshow(np.transpose(batch[0].numpy(), (1, 2, 0)))#, cmap=plt.cm.binary)
             if isPredCorrect==True:
                 color = 'blue'
             else:
                 color = 'red'
-            # prob = yHat[0][0] if predicted_label==1 else (1-yHat[0][0])
-            # plt.xlabel("({:.2f}){}".format(prob,make_farsi_text(class_names[predicted_label])),color=color, fontsize=35)
             plt.xlabel("{}".format(class_names[pred]),color=color, fontsize=25)
-            # plt.xlabel("{}".format(make_farsi_text(class_names[pred])),color=color, fontsize=30)
         plt.show()        
         print("Accuracy :", float(correct) / total)
         
@@ -226,8 +210,6 @@ class PrunningFineTuner_VGG16:
 
     def train_epoch(self, optimizer = None, rank_filters = False, regularization = None):
         for i, (batch, label) in enumerate(self.train_data_loader):
-            # print(batch.shape,label.shape)
-            # break
             self.train_batch(optimizer, batch, label, rank_filters, regularization)
 
     def train_batch(self, optimizer, batch, label, rank_filters, regularization=None):
@@ -241,20 +223,13 @@ class PrunningFineTuner_VGG16:
 
         if rank_filters:
             output = self.prunner.forward(input)
-            # self.criterion(output, Variable(label)).backward()
             loss = self.criterion(output, Variable(label))
-            # MAT: 20210313: فکر می‌کنم منظم سازی اینجا نباید باشه
-            # if regularization is not None:
-            #     loss += 0.001*regularization(0.05)
             loss.backward()
         else:
-
             loss = self.criterion(self.model(input), Variable(label))
-            # print(loss)
             if regularization is not None:
                 # print('Using Regularization: ',reg_name)
                 loss += 1e-8*regularization(0.5)
-                # print('loss, Regularization coef:', loss, 1e-8*regularization(0.5))
             loss.backward()
             optimizer.step()
 
@@ -308,7 +283,6 @@ class PrunningFineTuner_VGG16:
             if args.use_cuda:
                 self.model = self.model.cuda()
 
-            # total_number_of_filters += 
             message = str(100 - 100*float(self.total_num_filters()) / number_of_filters) + "%"
             print("Filters prunned", str(message))
             self.test()
@@ -322,7 +296,7 @@ class PrunningFineTuner_VGG16:
 
 
         # print("Finished. Going to fine tune the model a bit more")
-        # self.train(optimizer, epoches=5) # M.Amintoosi 15->3
+        # self.train(optimizer, epoches=5) 
         # models_dir = 'models/'
         # torch.save(model.state_dict(), models_dir+"painting_model_prunned.pt")
         # torch.save(model, models_dir+"VGG_model_COVID19_prunned.pt")
@@ -353,17 +327,6 @@ class PrunningFineTuner_VGG16:
         #Make sure all the layers are trainable
         for param in self.model.features.parameters():
             param.requires_grad = True
-
-        # number_of_filters = self.total_num_filters()
-        # num_filters_to_prune_per_iteration = 512
-        # iterations = int(float(number_of_filters) / num_filters_to_prune_per_iteration)
-
-        # iterations = int(iterations * 6 / 10) # M.Amintoosi
-
-        # print("Number of prunning iterations to reduce 60% filters", iterations)
-
-        # for i in range(1):#iterations):
-            # print("Iter: ", i, '/', iterations)
         print("Retraining with regularization ... ")
         optimizer = optim.Adam(self.model.parameters(), lr=0.0001)
         # optimizer = optim.SGD(self.model.parameters(), lr=0.001, momentum=0.9)
@@ -402,8 +365,6 @@ if __name__ == '__main__':
     args = get_args()
     # args.models_dir = 'C:/Archive/data/models/covid/'
     args.models_dir = 'models/'
-    # args.ds_name = 'COVID-CT' #'COVID-Radiography'
-    # args.pasvand = args.reg_name if args.reg_name is not None else 'non'
     reg_name = args.reg_name
 
     if args.train:
