@@ -283,8 +283,8 @@ class PrunningFineTuner_VGG16:
         number_of_filters = self.total_num_filters()
         num_filters_to_prune_per_iteration = 512
         iterations = int(float(number_of_filters) / num_filters_to_prune_per_iteration)
-        print(number_of_filters, num_filters_to_prune_per_iteration, iterations)
-        iterations = int(iterations * 7. / 10) # M.Amintoosi
+        # print(number_of_filters, num_filters_to_prune_per_iteration, iterations)
+        iterations = int(iterations * 7. / 10) 
         print(iterations)
         print("Number of prunning iterations to reduce 70% filters", iterations)
 
@@ -313,8 +313,8 @@ class PrunningFineTuner_VGG16:
             print("Filters prunned", str(message))
             self.test()
             print("Fine tuning to recover from prunning iteration.")
-            # optimizer = optim.Adam(self.model.parameters(), lr=0.0001)
-            optimizer = optim.SGD(self.model.parameters(), lr=0.001, momentum=0.9)
+            optimizer = optim.Adam(self.model.parameters(), lr=0.0001)
+            # optimizer = optim.SGD(self.model.parameters(), lr=0.001, momentum=0.9)
             if args.eat == 'dec':
                 self.train(optimizer, epoches=iterations-i)
             else:
