@@ -3,4 +3,4 @@
 
 ## Start Using Google Colab:
 
-https://colab.research.google.com/github/mamintoosi/OBD-for-VGG-Pruning-COVID19/blob/master/code/main_prune.ipynb
+https://colab.research.google.com/github/mamintoosi/OBD-for-VGG-Pruning-COVID19/blob/master/main_prune.ipynb
