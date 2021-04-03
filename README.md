@@ -9,7 +9,7 @@
 
 M. Amintoosi, m.amintoosi at gmail.com
 
-![HSQGL12-OBD sample output](./images/HSQGL12-OBD1.png)
+![HSQGL12-OBD sample output](./images/HSQGL12-OBD2.png)
 
 ## Start Using Google Colab:
 <div dir="rtl">

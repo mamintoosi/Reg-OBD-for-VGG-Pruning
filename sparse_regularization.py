@@ -186,27 +186,3 @@ class sparse_regularization(object):
                 #x+= _lambda*torch.sum((torch.sum(torch.sqrt(p),1))**2)
         return x
 
-    # total variation regularization
-    def total_variation_regularization(self, _lambda):
-        x = 0
-        for n, _module in self.model.named_modules():
-            if isinstance(_module, nn.Conv2d) and (not 'downsample' in n):
-                p = _module.weight
-                # number_of_out_channels = p.shape[0]
-                # number_of_in_channels = p.shape[1]
-                # p = p.reshape(p.shape[0]*p.shape[1],p.shape[2]*p.shape[3])
-                # p = torch.sum(torch.abs(p),1)
-                # p = p.reshape(number_of_out_channels,number_of_in_channels)
-                h = p.shape[2]
-                w = p.shape[3]
-                dx = p[:, :, :, 1:] - p[:, :, :, :-1]  # torch.abs()
-                dy = p[:, :, 1:, :] - p[:, :, :-1, :]
-                # error = torch.norm(dy, 1)
-                # با منفی که واگرا شد
-                tv = torch.norm(dy, 1)*torch.norm(dx, 1)/(2*w*h)
-                x += _lambda*tv
-
-                # hierarchical squared group l1/2 regularization based on the neuron wise grouping
-                #x+= _lambda*torch.sum((torch.sum(torch.sqrt(p),1))**2)
-        return x
-# to do: استفاده از نرم بلوکی - البته اگه بشه در تورچ نوشت
