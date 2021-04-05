@@ -155,7 +155,7 @@ class PrunningFineTuner_VGG16:
         self.model.train()
 
     def eval_test_results(self):
-        class_names = ['COVID','Normal']
+        class_names = ['COVID','Non']
         plt.figure(figsize=(25,10))
         count = np.zeros(2)
 
