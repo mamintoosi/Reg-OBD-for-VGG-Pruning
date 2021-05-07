@@ -1,11 +1,11 @@
 <div dir="rtl">
 کد مربوطه به مقاله ارسالی به مجله ماشین بینایی و پردازش تصویر، با عنوان:
 
-## ترکیب روش آسیب مغزی بهینه و منظم‌سازی تُنُک ‌ در کوچک‌سازی یک مدل یادگیری عمیق برای شناسایی کووید۱۹
+## ترکیب روش منظم‌سازی تُنُک و آسیب مغزی بهینه‌ در کوچک‌سازی یک مدل یادگیری عمیق برای شناسایی کووید۱۹
 </div>
 
 # Pruning deep neural networks to make them fast and small
-## Train a VGG16 model for COVID19 detection, compress the model with pruning the model using Optimal Brain Damage (OBD) and Regularization methods
+## Train a VGG16 model for COVID19 detection, compress the model with pruning the model using Regularization methods and Optimal Brain Damage (OBD) method
 
 M. Amintoosi, m.amintoosi at gmail.com
 
@@ -17,7 +17,7 @@ M. Amintoosi, m.amintoosi at gmail.com
 به لحاظ ماهیت تصادفی مقداردهی اولیه‌ی وزنهای شبکه‌های عصبی، روال آموزش شبکه، خصوصیات سرور تخصیص داده شده و ... نتایج در اجراهای مختلف مقداری متفاوت خواهد بود. یک اجرای کامل برنامه حدود ۷۰ دقیقه طول کشیده و نزدیک به ۲ گیگابایت داده و مدل دانلود یا تولید خواهد شد. هیچ داده‌ای روی دستگاه شما ذخیره نخواهد شد و همه عملیات روی سرورهای گوگل انجام می‌شود.
 </div>
 
-https://colab.research.google.com/github/mamintoosi/OBD-for-VGG-Pruning-COVID19/blob/master/main_prune.ipynb
+https://colab.research.google.com/github/mamintoosi/Reg-OBD-for-VGG-Pruning-COVID19/blob/master/main_prune.ipynb
 
 <div dir="rtl">
 پس از آموزش یا هرس مدل، نتیجه‌ی اجرای آن روی داده‌های تست و صحت
