@@ -42,12 +42,12 @@ https://colab.research.google.com/github/mamintoosi/Reg-OBD-for-VGG-Pruning/blob
 </table>
 
 برنامه‌های مرتبط با دو مجموعه داده‌ی FashionMNIST و STL10 از لینک‌های زیر قابل دسترس و اجرا هستند:
-
+</div>
 https://colab.research.google.com/github/mamintoosi/Reg-OBD-for-VGG-Pruning/blob/master/main_FashionMNIST.ipynb
 
 https://colab.research.google.com/github/mamintoosi/Reg-OBD-for-VGG-Pruning/blob/master/main_STL10.ipynb
 
-
+<div dir="rtl">
 ### مجموعه دادگان COVID19
 
 
