@@ -57,7 +57,7 @@ https://colab.research.google.com/github/mamintoosi/Reg-OBD-for-VGG-Pruning/blob
 به لحاظ ماهیت تصادفی مقداردهی اولیه‌ی وزنهای شبکه‌های عصبی، روال آموزش شبکه، خصوصیات سرور تخصیص داده شده و ... نتایج در اجراهای مختلف مقداری متفاوت خواهد بود. یک اجرای کامل برنامه حدود ۷۰ دقیقه طول کشیده و نزدیک به ۲ گیگابایت داده و مدل دانلود یا تولید خواهد شد.  همه عملیات روی سرورهای گوگل انجام می‌شود.
 </div>
 
-https://colab.research.google.com/github/mamintoosi/Reg-OBD-for-VGG-Pruning/blob/master/main_prune.ipynb
+https://colab.research.google.com/github/mamintoosi/Reg-OBD-for-VGG-Pruning/blob/master/main_COVID19.ipynb
 
 <div dir="rtl">
 پس از آموزش یا هرس مدل، نتیجه‌ی اجرای آن روی داده‌های تست و صحت
