@@ -88,7 +88,7 @@ https://colab.research.google.com/github/mamintoosi/Reg-OBD-for-VGG-Pruning/blob
     title = {ترکیب روش منظم‌سازی تُنُک و آسیب مغزی بهینه‌ در کوچک‌سازی یک مدل یادگیری عمیق},
     journal = {مجله ماشین بینایی و پردازش تصویر},
     year = {1401},
-	volume = {9},
-	number = {1},
-	pages = {31-45}}
+    volume = {9},
+    number = {1},
+    pages = {31-45}}
 ```
