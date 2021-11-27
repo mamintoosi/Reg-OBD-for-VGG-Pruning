@@ -56,6 +56,7 @@ https://colab.research.google.com/github/mamintoosi/Reg-OBD-for-VGG-Pruning/blob
 https://colab.research.google.com/github/mamintoosi/Reg-OBD-for-VGG-Pruning/blob/master/main_STL10.ipynb
 
 <div dir="rtl">
+
 ### مجموعه دادگان COVID19
 
 
@@ -89,7 +90,5 @@ https://colab.research.google.com/github/mamintoosi/Reg-OBD-for-VGG-Pruning/blob
     year = {1401},
 	volume = {9},
 	number = {1},
-	pages = {31-45}
-    note = 
-	}
+	pages = {31-45}}
 ```
