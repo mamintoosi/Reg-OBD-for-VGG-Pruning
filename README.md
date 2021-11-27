@@ -1,12 +1,16 @@
-
 M. Amintoosi, m.amintoosi at gmail.com
+
+[![repo size](https://img.shields.io/github/repo-size/mamintoosi/Reg-OBD-for-VGG-Pruning.svg)](https://github.com/mamintoosi/Reg-OBD-for-VGG-Pruning/archive/master.zip)
+ [![GitHub forks](https://img.shields.io/github/forks/mamintoosi/Reg-OBD-for-VGG-Pruning)](https://github.com/mamintoosi/Reg-OBD-for-VGG-Pruning/network)
+[![GitHub issues](https://img.shields.io/github/issues/mamintoosi/Reg-OBD-for-VGG-Pruning)](https://github.com/mamintoosi/Reg-OBD-for-VGG-Pruning/issues)
+[![GitHub license](https://img.shields.io/github/license/mamintoosi/Reg-OBD-for-VGG-Pruning)](https://github.com/mamintoosi/Reg-OBD-for-VGG-Pruning/blob/main/LICENSE)
 
 <div dir="rtl">
 کد مربوط به 
 <a href="http://jmvip.sinaweb.net/article_136180.html">
-مقاله ارسالی به مجله ماشین بینایی و پردازش تصویر
+مقاله منتشر شده در مجله ماشین بینایی و پردازش تصویر
 </a>
-، با عنوان:
+با عنوان:
 
 ## ترکیب روش منظم‌سازی تُنُک و آسیب مغزی بهینه‌ در کوچک‌سازی یک مدل یادگیری عمیق 
 
@@ -76,3 +80,16 @@ https://colab.research.google.com/github/mamintoosi/Reg-OBD-for-VGG-Pruning/blob
 
 در آخرین سلول مشخصات مدل ترکیبی پیشنهادی نمایش داده شده است، با اصلاح مقدار متغیر input_model می‌توان مشخصات سایر مدلها را نیز مشاهده کرد.
 </div>
+
+```
+@article{Amintoosi1401_Reg-OBD-for-VGG-Pruning,
+    author = {محمود امین‌طوسی},
+    title = {ترکیب روش منظم‌سازی تُنُک و آسیب مغزی بهینه‌ در کوچک‌سازی یک مدل یادگیری عمیق},
+    journal = {مجله ماشین بینایی و پردازش تصویر},
+    year = {1401},
+	volume = {9},
+	number = {1},
+	pages = {31-45}
+    note = 
+	}
+```
